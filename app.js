@@ -15,7 +15,7 @@ const userRoutes=require('./api/routes/user');
 // mongoose.connect("mongodb+srv://root:"+ process.env.MONGO_CODE+"@cluster0.3mzwldy.mongodb.net/?retryWrites=true&w=majority",{
 // })
 
-mongoose.connect("mongodb+srv://root:root@codestore.wmj7nuc.mongodb.net/amaze-game?retryWrites=true&w=majority",{
+mongoose.connect("mongodb+srv://root:"+process.env.MONGO_CODE+"@codestore.wmj7nuc.mongodb.net/amaze-game?retryWrites=true&w=majority",{
 })
 
 mongoose.Promise=global.Promise;
