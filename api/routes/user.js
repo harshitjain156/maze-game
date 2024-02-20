@@ -15,7 +15,7 @@ router.post('/signup',(req,res,next)=>{
    .then(result=>{
     if(result.length>1){
         return res.status(409).json({
-            message:"user exist"
+            message:"user-exists"
         })
     }else{
         bcrypt.hash(req.body.password,10,(err,hash)=>{
@@ -35,7 +35,7 @@ router.post('/signup',(req,res,next)=>{
                 .then(result=>
                     {   console.log(result);
                         return res.status(201).json({
-                            message:"user created",
+                            message:"user-created",
                             user:result
                         })
                     })
@@ -76,13 +76,13 @@ router.post('/login',(req,res,next)=>{
     .then(user=>{
         if(user.length<1){
             return res.status(404).json({
-                message:"user not found"
+                message:"user-not-found"
             })
         }else{
             bcrypt.compare(req.body.password,user[0].password,(err,result)=>{
                 if(err){
                     return res.status(404).json({
-                        message:"Incorrect password"
+                        message:"wrong-password"
                     });
                 }
                 if(result){
@@ -95,7 +95,7 @@ router.post('/login',(req,res,next)=>{
                         expiresIn:"1h"
                     })
                     return res.status(200).json({
-                        message:"Authentication Successful",
+                        message:"success",
                         user:user[0],
 
                         token:token,
@@ -103,7 +103,7 @@ router.post('/login',(req,res,next)=>{
                     })
                 }
                 res.status(404).json({
-                    message:"Invalid user"
+                    message:"invalid-user"
                 })
             });
         }
