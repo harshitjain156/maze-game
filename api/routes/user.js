@@ -11,46 +11,59 @@ const User=require('../models/user');
 const user = require('../models/user');
 router.post('/signup',(req,res,next)=>{
 
-   User.find({username:req.body.username}).exec()
-   .then(result=>{
-    if(result.length>1){
-        return res.status(409).json({
-            message:"user-exists"
-        })
-    }else{
-        bcrypt.hash(req.body.password,10,(err,hash)=>{
-            console.log("kkk")
-            if(err){
-                return res.status(500).json({
-                    error:"err"
-                })
-            }else{
-                const user=new User({
-                    _id:new mongoose.Types.ObjectId(),
-                    phone:req.body.phone,
-                    username:req.body.username,
-                    password:hash
-                })
-                user.save()
-                .then(result=>
-                    {   console.log(result);
-                        return res.status(201).json({
-                            message:"user-created",
-                            user:result
-                        })
-                    })
-                .catch(err=>{
-                    console.log(err)
-                    return res.status(500).json({
-                        error:err
-                    })
-                })
-            }
-                
-        })
-    }
-   })
+    User.find({phone:req.body.phone}).exec()
+    .then(result=>{
+        if(result.length>0){
+            return res.status(409).json({
+                message:"phone-exists"
+            })
+        }else{
+            User.find({username:req.body.username}).exec()
+            .then(result=>{
+             if(result.length>1){
+                 return res.status(409).json({
+                     message:"user-exists"
+                 })
+             }else{
+                 bcrypt.hash(req.body.password,10,(err,hash)=>{
+                     console.log("kkk")
+                     if(err){
+                         return res.status(500).json({
+                             error:"err"
+                             ,message:err
+                         })
+                     }else{
+                         const user=new User({
+                             _id:new mongoose.Types.ObjectId(),
+                             phone:req.body.phone,
+                             username:req.body.username,
+                             password:hash
+                         })
+                         user.save()
+                         .then(result=>
+                             {   console.log(result);
+                                 return res.status(201).json({
+                                     message:"user-created",
+                                     user:result
+                                 })
+                             })
+                         .catch(err=>{
+                             console.log(err)
+                             return res.status(500).json({
+                                 error:err
+                             })
+                         })
+                     }
+                         
+                 })
+             }
+            })
+         
 
+
+        }
+    })
+   
    
 
    
